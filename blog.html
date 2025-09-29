@@ -33,35 +33,8 @@
 
   <main class="container">
     <h2 style="margin-bottom:1rem; font-family: var(--font-heading);">Últimos Artigos</h2>
-    <div class="cards">
-      <!-- Post 1 -->
-      <div class="card">
-        <img src="assets/images/hero.jpg" alt="Treine seu cão para Canicross" />
-        <div class="card-content">
-          <h3>Como preparar seu cão para a primeira prova de Canicross</h3>
-          <p>Começar com o pé e a pata direita faz toda a diferença para o sucesso nas corridas. Confira dicas de aquecimento, alimentação e cuidados.</p>
-          <a href="post.html" class="btn">Ler artigo</a>
-        </div>
-      </div>
-      <!-- Post 2 -->
-      <div class="card">
-        <img src="assets/images/hero.jpg" alt="Alimentação esportiva canina" />
-        <div class="card-content">
-          <h3>Nutrição esportiva para cães atletas</h3>
-          <p>Saiba quais alimentos e suplementos são recomendados para manter o seu cão saudável e cheio de energia durante os treinos.</p>
-          <a href="post.html" class="btn">Ler artigo</a>
-        </div>
-      </div>
-      <!-- Post 3 -->
-      <div class="card">
-        <img src="assets/images/hero.jpg" alt="História de superação" />
-        <div class="card-content">
-          <h3>História: quando canicross salvou uma amizade</h3>
-          <p>Descubra como a prática do esporte aproximou ainda mais um tutor e seu cão, transformando dificuldades em conquistas memoráveis.</p>
-          <a href="post.html" class="btn">Ler artigo</a>
-        </div>
-      </div>
-    </div>
+    <!-- Lista dinâmica de posts -->
+    <div id="posts-container" class="cards"></div>
   </main>
 
   <footer>
@@ -92,5 +65,24 @@
     </div>
     <div style="text-align:center; margin-top:1rem; font-size:0.8rem;">© 2025 Feras Esportivas. Todos os direitos reservados.</div>
   </footer>
+
+  <!-- Script para carregar posts dinâmicos -->
+  <script>
+    (function() {
+      const posts = JSON.parse(localStorage.getItem('posts')) || [];
+      const container = document.getElementById('posts-container');
+      if (posts.length === 0) {
+        container.innerHTML = '<p>Nenhum post publicado no momento.</p>';
+        return;
+      }
+      posts.forEach(function(p, index) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        // Para o conteúdo completo, podemos redirecionar para post.html com índice
+        card.innerHTML = `<img src="assets/images/hero.jpg" alt="${p.title}"><div class="card-content"><h3>${p.title}</h3><p>${p.snippet}</p><a href="post.html?index=${index}" class="btn">Ler artigo</a></div>`;
+        container.appendChild(card);
+      });
+    })();
+  </script>
 </body>
 </html>

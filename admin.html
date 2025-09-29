@@ -47,12 +47,48 @@
     </div>
     <section style="margin-bottom:2rem;">
       <h2 style="font-family:var(--font-heading); margin-bottom:1rem;">Gerenciamento</h2>
-      <ul style="list-style:none;">
-        <li style="margin-bottom:1rem;"><a href="events.html" class="btn">Gerenciar Eventos</a></li>
-        <li style="margin-bottom:1rem;"><a href="store.html" class="btn">Gerenciar Produtos</a></li>
-        <li style="margin-bottom:1rem;"><a href="blog.html" class="btn">Gerenciar Posts</a></li>
-        <li style="margin-bottom:1rem;"><a href="#" class="btn">Ver Pedidos</a></li>
-      </ul>
+      <p>Use os formulários abaixo para adicionar novos itens. Clique em "Editar" ou "Excluir" para modificar ou remover.</p>
+      <!-- Gerenciar Eventos -->
+      <section id="events-management" style="margin-bottom:2rem;">
+        <h3 style="font-family:var(--font-heading); margin-top:1.5rem; margin-bottom:0.5rem;">Eventos</h3>
+        <form id="event-form" style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem;">
+          <input type="text" id="event-title" placeholder="Título" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+          <input type="date" id="event-date" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+          <input type="text" id="event-location" placeholder="Localização" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+          <input type="text" id="event-modal" placeholder="Modalidade" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+          <input type="text" id="event-level" placeholder="Nível" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+          <button type="submit" class="cta-button" style="padding:0.5rem 1rem;">Adicionar Evento</button>
+        </form>
+        <ul id="events-list" style="list-style:none; padding:0;">
+          <!-- Lista dinâmica de eventos -->
+        </ul>
+      </section>
+      <!-- Gerenciar Produtos -->
+      <section id="products-management" style="margin-bottom:2rem;">
+        <h3 style="font-family:var(--font-heading); margin-top:1.5rem; margin-bottom:0.5rem;">Produtos</h3>
+        <form id="product-form" style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem;">
+          <input type="text" id="product-name" placeholder="Nome" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+          <input type="text" id="product-desc" placeholder="Descrição" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+          <input type="number" id="product-price" placeholder="Preço" required step="0.01" style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+          <button type="submit" class="cta-button" style="padding:0.5rem 1rem;">Adicionar Produto</button>
+        </form>
+        <ul id="products-list" style="list-style:none; padding:0;">
+          <!-- Lista dinâmica de produtos -->
+        </ul>
+      </section>
+      <!-- Gerenciar Posts -->
+      <section id="posts-management" style="margin-bottom:2rem;">
+        <h3 style="font-family:var(--font-heading); margin-top:1.5rem; margin-bottom:0.5rem;">Posts</h3>
+        <form id="post-form" style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem;">
+          <input type="text" id="post-title" placeholder="Título" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+          <input type="text" id="post-snippet" placeholder="Resumo" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+          <textarea id="post-content" placeholder="Conteúdo" required style="flex:1 1 100%; padding:0.5rem; border:1px solid #ccc; border-radius:4px;"></textarea>
+          <button type="submit" class="cta-button" style="padding:0.5rem 1rem;">Adicionar Post</button>
+        </form>
+        <ul id="posts-list" style="list-style:none; padding:0;">
+          <!-- Lista dinâmica de posts -->
+        </ul>
+      </section>
     </section>
   </main>
 
@@ -73,5 +109,190 @@
     </div>
     <div style="text-align:center; margin-top:1rem; font-size:0.8rem;">© 2025 Feras Esportivas. Todos os direitos reservados.</div>
   </footer>
+
+  <!-- Script de gerenciamento de admin -->
+  <script>
+    (function() {
+      // Verifica se admin está logado
+      if (!localStorage.getItem('adminLogged')) {
+        window.location.href = 'login.html';
+        return;
+      }
+      // Carrega ou inicializa arrays de dados
+      let events = JSON.parse(localStorage.getItem('events')) || [];
+      let products = JSON.parse(localStorage.getItem('products')) || [];
+      let posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+      function saveEvents() { localStorage.setItem('events', JSON.stringify(events)); }
+      function saveProducts() { localStorage.setItem('products', JSON.stringify(products)); }
+      function savePosts() { localStorage.setItem('posts', JSON.stringify(posts)); }
+
+      // Eventos
+      function renderEvents() {
+        const list = document.getElementById('events-list');
+        list.innerHTML = '';
+        if (events.length === 0) {
+          const li = document.createElement('li');
+          li.textContent = 'Nenhum evento cadastrado.';
+          list.appendChild(li);
+          return;
+        }
+        events.forEach((ev, index) => {
+          const li = document.createElement('li');
+          li.style.marginBottom = '0.5rem';
+          li.innerHTML = `<strong>${ev.title}</strong> - ${ev.date} - ${ev.location} - ${ev.modalidade} - ${ev.nivel} ` +
+            `<button data-index="${index}" class="edit-event" style="margin-left:0.5rem;">Editar</button> ` +
+            `<button data-index="${index}" class="delete-event" style="margin-left:0.5rem;">Excluir</button>`;
+          list.appendChild(li);
+        });
+      }
+      document.getElementById('event-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const newEvent = {
+          title: document.getElementById('event-title').value,
+          date: document.getElementById('event-date').value,
+          location: document.getElementById('event-location').value,
+          modalidade: document.getElementById('event-modal').value,
+          nivel: document.getElementById('event-level').value
+        };
+        events.push(newEvent);
+        saveEvents();
+        renderEvents();
+        e.target.reset();
+      });
+      document.getElementById('events-list').addEventListener('click', function(e) {
+        if (e.target.classList.contains('delete-event')) {
+          const idx = parseInt(e.target.dataset.index);
+          events.splice(idx, 1);
+          saveEvents();
+          renderEvents();
+        } else if (e.target.classList.contains('edit-event')) {
+          const idx = parseInt(e.target.dataset.index);
+          const ev = events[idx];
+          const t = prompt('Título', ev.title);
+          if (t === null) return;
+          const d = prompt('Data', ev.date);
+          if (d === null) return;
+          const l = prompt('Localização', ev.location);
+          if (l === null) return;
+          const m = prompt('Modalidade', ev.modalidade);
+          if (m === null) return;
+          const n = prompt('Nível', ev.nivel);
+          if (n === null) return;
+          events[idx] = { title: t, date: d, location: l, modalidade: m, nivel: n };
+          saveEvents();
+          renderEvents();
+        }
+      });
+      renderEvents();
+
+      // Produtos
+      function renderProducts() {
+        const list = document.getElementById('products-list');
+        list.innerHTML = '';
+        if (products.length === 0) {
+          const li = document.createElement('li');
+          li.textContent = 'Nenhum produto cadastrado.';
+          list.appendChild(li);
+          return;
+        }
+        products.forEach((p, index) => {
+          const li = document.createElement('li');
+          li.style.marginBottom = '0.5rem';
+          li.innerHTML = `<strong>${p.name}</strong> - R$ ${p.price.toFixed(2)} - ${p.desc} ` +
+            `<button data-index="${index}" class="edit-product" style="margin-left:0.5rem;">Editar</button> ` +
+            `<button data-index="${index}" class="delete-product" style="margin-left:0.5rem;">Excluir</button>`;
+          list.appendChild(li);
+        });
+      }
+      document.getElementById('product-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const newProduct = {
+          name: document.getElementById('product-name').value,
+          desc: document.getElementById('product-desc').value,
+          price: parseFloat(document.getElementById('product-price').value)
+        };
+        products.push(newProduct);
+        saveProducts();
+        renderProducts();
+        e.target.reset();
+      });
+      document.getElementById('products-list').addEventListener('click', function(e) {
+        if (e.target.classList.contains('delete-product')) {
+          const idx = parseInt(e.target.dataset.index);
+          products.splice(idx, 1);
+          saveProducts();
+          renderProducts();
+        } else if (e.target.classList.contains('edit-product')) {
+          const idx = parseInt(e.target.dataset.index);
+          const p = products[idx];
+          const n = prompt('Nome', p.name);
+          if (n === null) return;
+          const d = prompt('Descrição', p.desc);
+          if (d === null) return;
+          const priceStr = prompt('Preço', p.price);
+          if (priceStr === null) return;
+          const pr = parseFloat(priceStr);
+          products[idx] = { name: n, desc: d, price: pr };
+          saveProducts();
+          renderProducts();
+        }
+      });
+      renderProducts();
+
+      // Posts
+      function renderPosts() {
+        const list = document.getElementById('posts-list');
+        list.innerHTML = '';
+        if (posts.length === 0) {
+          const li = document.createElement('li');
+          li.textContent = 'Nenhum post cadastrado.';
+          list.appendChild(li);
+          return;
+        }
+        posts.forEach((p, index) => {
+          const li = document.createElement('li');
+          li.style.marginBottom = '0.5rem';
+          li.innerHTML = `<strong>${p.title}</strong> - ${p.snippet} ` +
+            `<button data-index="${index}" class="edit-post" style="margin-left:0.5rem;">Editar</button> ` +
+            `<button data-index="${index}" class="delete-post" style="margin-left:0.5rem;">Excluir</button>`;
+          list.appendChild(li);
+        });
+      }
+      document.getElementById('post-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const newPost = {
+          title: document.getElementById('post-title').value,
+          snippet: document.getElementById('post-snippet').value,
+          content: document.getElementById('post-content').value
+        };
+        posts.push(newPost);
+        savePosts();
+        renderPosts();
+        e.target.reset();
+      });
+      document.getElementById('posts-list').addEventListener('click', function(e) {
+        if (e.target.classList.contains('delete-post')) {
+          const idx = parseInt(e.target.dataset.index);
+          posts.splice(idx, 1);
+          savePosts();
+          renderPosts();
+        } else if (e.target.classList.contains('edit-post')) {
+          const idx = parseInt(e.target.dataset.index);
+          const p = posts[idx];
+          const t = prompt('Título', p.title);
+          if (t === null) return;
+          const s = prompt('Resumo', p.snippet);
+          if (s === null) return;
+          const c = prompt('Conteúdo', p.content);
+          if (c === null) return;
+          posts[idx] = { title: t, snippet: s, content: c };
+          savePosts();
+          renderPosts();
+        }
+      });
+      renderPosts();
+    })();
+  </script>
 </body>
 </html>

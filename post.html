@@ -26,22 +26,14 @@
 
   <section class="hero" style="background-image:url('assets/images/hero.jpg'); height:30vh;">
     <div class="hero-content">
-      <h1>Título do Artigo</h1>
-      <p>Categoria: Treinamento • Publicado em 30/09/2025 • Autor: Equipe Feras</p>
+      <h1 id="post-title">Título do Artigo</h1>
+      <p id="post-meta">Categoria • Data • Autor</p>
     </div>
   </section>
 
   <main class="container" style="max-width: 800px;">
-    <article style="background-color: var(--color-light); padding: 2rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-      <h2 style="font-family: var(--font-heading); margin-bottom: 1rem;">Como preparar seu cão para a primeira prova de Canicross</h2>
-      <p>O canicross é uma modalidade esportiva que une corredores e seus cães, criando uma experiência única de parceria e superação. Para garantir que a prova seja segura e divertida, é importante preparar tanto o atleta quanto o cão de forma adequada.</p>
-      <h3 style="margin-top:1.5rem;">1. Avalie a condição física</h3>
-      <p>Antes de iniciar os treinos, leve seu cão ao veterinário para realizar um check-up completo. Certifique-se de que ele está apto para atividades de resistência e impacto.</p>
-      <h3 style="margin-top:1.5rem;">2. Equipamentos certos</h3>
-      <p>Utilize cintos, peitorais e linhas de tração específicos para canicross, que proporcionem conforto e segurança. Evite coleiras tradicionais, pois podem causar lesões no pescoço.</p>
-      <h3 style="margin-top:1.5rem;">3. Treinos progressivos</h3>
-      <p>Comece com percursos curtos e em ritmo leve. Aumente gradualmente a distância e a intensidade, respeitando o tempo de adaptação do cão. Preste atenção aos sinais de cansaço e hidratação.</p>
-      <p style="margin-top:1.5rem;">Com dedicação e os equipamentos corretos, você e seu parceiro canino estarão prontos para viver emoções inesquecíveis nas trilhas de canicross!</p>
+    <article id="post-article" style="background-color: var(--color-light); padding: 2rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+      <!-- Conteúdo dinâmico do post será inserido via script -->
     </article>
   </main>
 
@@ -73,5 +65,33 @@
     </div>
     <div style="text-align:center; margin-top:1rem; font-size:0.8rem;">© 2025 Feras Esportivas. Todos os direitos reservados.</div>
   </footer>
+
+  <!-- Script para carregar conteúdo dinâmico de posts -->
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const idxStr = params.get('index');
+      const idx = parseInt(idxStr);
+      const posts = JSON.parse(localStorage.getItem('posts')) || [];
+      if (!isNaN(idx) && posts[idx]) {
+        const p = posts[idx];
+        document.getElementById('post-title').textContent = p.title;
+        // Não armazenamos categoria, data ou autor; deixe meta vazio ou personalize se desejar
+        document.getElementById('post-meta').textContent = '';
+        const article = document.getElementById('post-article');
+        article.innerHTML = '';
+        // Converte quebras de linha em parágrafos
+        const paragraphs = p.content.split(/\n+/);
+        paragraphs.forEach(function(par) {
+          const pe = document.createElement('p');
+          pe.textContent = par;
+          article.appendChild(pe);
+        });
+      } else {
+        const article = document.getElementById('post-article');
+        article.innerHTML = '<h2>Artigo não encontrado</h2><p>Não foi possível localizar o artigo solicitado.</p>';
+      }
+    })();
+  </script>
 </body>
 </html>

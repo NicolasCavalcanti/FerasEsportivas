@@ -54,36 +54,8 @@
         <option>G</option>
       </select>
     </div>
-    <!-- Products grid -->
-    <div class="cards">
-      <!-- Product 1 -->
-      <div class="card">
-        <img src="assets/images/hero.jpg" alt="Cinturão Pro Feras" />
-        <div class="card-content">
-          <h3>Cinturão Pro Feras</h3>
-          <p>Cinturão com amortecimento para canicross. Tamanhos P/M/G. Próprio para provas intensas.</p>
-          <a href="#" class="btn">Comprar</a>
-        </div>
-      </div>
-      <!-- Product 2 -->
-      <div class="card">
-        <img src="assets/images/hero.jpg" alt="Peitoral Adventure" />
-        <div class="card-content">
-          <h3>Peitoral Adventure</h3>
-          <p>Peitoral ajustável com espuma interna, ideal para trilhas e corridas longas.</p>
-          <a href="#" class="btn">Comprar</a>
-        </div>
-      </div>
-      <!-- Product 3 -->
-      <div class="card">
-        <img src="assets/images/hero.jpg" alt="Linha de Tração Shock Free" />
-        <div class="card-content">
-          <h3>Linha de Tração Shock Free</h3>
-          <p>Leash elástica que absorve impactos, proporcionando mais conforto para você e seu cão.</p>
-          <a href="#" class="btn">Comprar</a>
-        </div>
-      </div>
-    </div>
+    <!-- Lista dinâmica de produtos -->
+    <div id="products-container" class="cards"></div>
   </main>
 
   <footer>
@@ -114,5 +86,23 @@
     </div>
     <div style="text-align:center; margin-top:1rem; font-size:0.8rem;">© 2025 Feras Esportivas. Todos os direitos reservados.</div>
   </footer>
+
+  <!-- Script para carregar produtos dinâmicos -->
+  <script>
+    (function() {
+      const products = JSON.parse(localStorage.getItem('products')) || [];
+      const container = document.getElementById('products-container');
+      if (products.length === 0) {
+        container.innerHTML = '<p>Nenhum produto disponível no momento.</p>';
+        return;
+      }
+      products.forEach(function(p) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<img src="assets/images/hero.jpg" alt="${p.name}"><div class="card-content"><h3>${p.name}</h3><p>${p.desc} – R$ ${p.price.toFixed(2)}</p><a href="#" class="btn">Comprar</a></div>`;
+        container.appendChild(card);
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -56,37 +56,8 @@
         <option>Avançado</option>
       </select>
     </div>
-    <!-- Events list -->
-    <div class="cards">
-      <!-- Event 1 -->
-      <div class="card">
-        <img src="assets/images/hero.jpg" alt="Canicross São Paulo" />
-        <div class="card-content">
-          <h3>Canicross São Paulo</h3>
-          <p>Parque Estadual da Cantareira – 18/10/2025 – Modalidade: Canicross – Nível: Intermediário</p>
-          <a href="#" class="btn">Inscrever-se</a>
-        </div>
-      </div>
-      <!-- Event 2 -->
-      <div class="card">
-        <img src="assets/images/hero.jpg" alt="Agility Rio de Janeiro" />
-        <div class="card-content">
-          <h3>Agility Rio de Janeiro</h3>
-          <p>Parque Lage – 05/11/2025 – Modalidade: Agility – Nível: Iniciante</p>
-          <a href="#" class="btn">Inscrever-se</a>
-        </div>
-      </div>
-      <!-- Event 3 -->
-      <div class="card">
-        <img src="assets/images/hero.jpg" alt="Bikejoring Minas" />
-        <div class="card-content">
-          <h3>Bikejoring Minas</h3>
-          <p>Serra do Cipó – 22/11/2025 – Modalidade: Bikejoring – Nível: Avançado</p>
-          <a href="#" class="btn">Inscrever-se</a>
-        </div>
-      </div>
-      <!-- Additional events can be added via CMS/admin panel in a real implementation -->
-    </div>
+    <!-- Lista dinâmica de eventos -->
+    <div id="events-container" class="cards"></div>
   </main>
 
   <footer>
@@ -117,5 +88,23 @@
     </div>
     <div style="text-align:center; margin-top:1rem; font-size:0.8rem;">© 2025 Feras Esportivas. Todos os direitos reservados.</div>
   </footer>
+
+  <!-- Script para carregar eventos dinâmicos -->
+  <script>
+    (function() {
+      const events = JSON.parse(localStorage.getItem('events')) || [];
+      const container = document.getElementById('events-container');
+      if (events.length === 0) {
+        container.innerHTML = '<p>Nenhum evento encontrado. Aguarde atualizações.</p>';
+        return;
+      }
+      events.forEach(function(ev) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<img src="assets/images/hero.jpg" alt="${ev.title}"><div class="card-content"><h3>${ev.title}</h3><p>${ev.location} – ${ev.date} – Modalidade: ${ev.modalidade} – Nível: ${ev.nivel}</p><a href="#" class="btn">Inscrever-se</a></div>`;
+        container.appendChild(card);
+      });
+    })();
+  </script>
 </body>
 </html>
