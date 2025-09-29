@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loja | Feras Esportivas</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <header>
+    <div class="container nav-bar">
+      <div class="logo">Feras Esportivas</div>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="events.html">Eventos</a>
+        <a href="store.html" class="cta-button">Loja</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html">Sobre</a>
+        <a href="contact.html">Contato</a>
+        <a href="login.html" class="cta-button">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" style="background-image:url('assets/images/hero.jpg'); height:40vh;">
+    <div class="hero-content">
+      <h1>Loja Oficial</h1>
+      <p>Equipamentos criados por quem vive o esporte. Linha própria e produtos de parceiros selecionados.</p>
+    </div>
+  </section>
+
+  <main class="container">
+    <h2 style="margin-bottom: 1rem; font-family: var(--font-heading);">Produtos em destaque</h2>
+    <!-- Filters -->
+    <div style="margin-bottom:1.5rem; display:flex; flex-wrap:wrap; gap:1rem;">
+      <select style="padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+        <option value="">Categoria</option>
+        <option>Cinturões</option>
+        <option>Peitorais</option>
+        <option>Leashes</option>
+      </select>
+      <select style="padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+        <option value="">Atividade</option>
+        <option>Canicross</option>
+        <option>Agility</option>
+        <option>Bikejoring</option>
+      </select>
+      <select style="padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+        <option value="">Tamanho do Cão</option>
+        <option>P</option>
+        <option>M</option>
+        <option>G</option>
+      </select>
+    </div>
+    <!-- Products grid -->
+    <div class="cards">
+      <!-- Product 1 -->
+      <div class="card">
+        <img src="assets/images/hero.jpg" alt="Cinturão Pro Feras" />
+        <div class="card-content">
+          <h3>Cinturão Pro Feras</h3>
+          <p>Cinturão com amortecimento para canicross. Tamanhos P/M/G. Próprio para provas intensas.</p>
+          <a href="#" class="btn">Comprar</a>
+        </div>
+      </div>
+      <!-- Product 2 -->
+      <div class="card">
+        <img src="assets/images/hero.jpg" alt="Peitoral Adventure" />
+        <div class="card-content">
+          <h3>Peitoral Adventure</h3>
+          <p>Peitoral ajustável com espuma interna, ideal para trilhas e corridas longas.</p>
+          <a href="#" class="btn">Comprar</a>
+        </div>
+      </div>
+      <!-- Product 3 -->
+      <div class="card">
+        <img src="assets/images/hero.jpg" alt="Linha de Tração Shock Free" />
+        <div class="card-content">
+          <h3>Linha de Tração Shock Free</h3>
+          <p>Leash elástica que absorve impactos, proporcionando mais conforto para você e seu cão.</p>
+          <a href="#" class="btn">Comprar</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-content">
+      <div>
+        <h4>Feras Esportivas</h4>
+        <p>Somos movidos por patas, suor e propósito. Acreditamos no poder do esporte para fortalecer vínculos entre humanos e cães.</p>
+      </div>
+      <div>
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="events.html">Eventos</a></li>
+          <li><a href="store.html">Loja</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="about.html">Sobre</a></li>
+          <li><a href="contact.html">Contato</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contato</h4>
+        <ul>
+          <li>Email: <a href="mailto:contato@ferasesportivas.com">contato@ferasesportivas.com</a></li>
+          <li>Instagram: <a href="https://instagram.com/feras.esportivas" target="_blank">@feras.esportivas</a></li>
+          <li>TikTok: <a href="https://tiktok.com/@ferasesportivas" target="_blank">@ferasesportivas</a></li>
+        </ul>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:1rem; font-size:0.8rem;">© 2025 Feras Esportivas. Todos os direitos reservados.</div>
+  </footer>
+</body>
+</html>

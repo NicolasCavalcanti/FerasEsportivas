@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eventos | Feras Esportivas</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <!-- Navigation -->
+  <header>
+    <div class="container nav-bar">
+      <div class="logo">Feras Esportivas</div>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="events.html" class="cta-button">Eventos</a>
+        <a href="store.html">Loja</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html">Sobre</a>
+        <a href="contact.html">Contato</a>
+        <a href="login.html" class="cta-button">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" style="background-image: url('assets/images/hero.jpg'); height: 40vh;">
+    <div class="hero-content">
+      <h1>Calendário de Eventos</h1>
+      <p>Escolha sua modalidade, filtre por local e garanta sua vaga em nossas provas.</p>
+    </div>
+  </section>
+
+  <main class="container">
+    <h2 style="margin-bottom: 1rem; font-family: var(--font-heading);">Próximos Eventos</h2>
+    <!-- Filter section -->
+    <div style="margin-bottom:1.5rem; display:flex; flex-wrap:wrap; gap:1rem;">
+      <select style="padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+        <option value="">Modalidade</option>
+        <option>Canicross</option>
+        <option>Agility</option>
+        <option>Bikejoring</option>
+      </select>
+      <select style="padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+        <option value="">Estado</option>
+        <option>SP</option>
+        <option>RJ</option>
+        <option>MG</option>
+        <option>RS</option>
+      </select>
+      <select style="padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+        <option value="">Nível</option>
+        <option>Iniciante</option>
+        <option>Intermediário</option>
+        <option>Avançado</option>
+      </select>
+    </div>
+    <!-- Events list -->
+    <div class="cards">
+      <!-- Event 1 -->
+      <div class="card">
+        <img src="assets/images/hero.jpg" alt="Canicross São Paulo" />
+        <div class="card-content">
+          <h3>Canicross São Paulo</h3>
+          <p>Parque Estadual da Cantareira – 18/10/2025 – Modalidade: Canicross – Nível: Intermediário</p>
+          <a href="#" class="btn">Inscrever-se</a>
+        </div>
+      </div>
+      <!-- Event 2 -->
+      <div class="card">
+        <img src="assets/images/hero.jpg" alt="Agility Rio de Janeiro" />
+        <div class="card-content">
+          <h3>Agility Rio de Janeiro</h3>
+          <p>Parque Lage – 05/11/2025 – Modalidade: Agility – Nível: Iniciante</p>
+          <a href="#" class="btn">Inscrever-se</a>
+        </div>
+      </div>
+      <!-- Event 3 -->
+      <div class="card">
+        <img src="assets/images/hero.jpg" alt="Bikejoring Minas" />
+        <div class="card-content">
+          <h3>Bikejoring Minas</h3>
+          <p>Serra do Cipó – 22/11/2025 – Modalidade: Bikejoring – Nível: Avançado</p>
+          <a href="#" class="btn">Inscrever-se</a>
+        </div>
+      </div>
+      <!-- Additional events can be added via CMS/admin panel in a real implementation -->
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-content">
+      <div>
+        <h4>Feras Esportivas</h4>
+        <p>Somos movidos por patas, suor e propósito. Acreditamos no poder do esporte para fortalecer vínculos entre humanos e cães.</p>
+      </div>
+      <div>
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="events.html">Eventos</a></li>
+          <li><a href="store.html">Loja</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="about.html">Sobre</a></li>
+          <li><a href="contact.html">Contato</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contato</h4>
+        <ul>
+          <li>Email: <a href="mailto:contato@ferasesportivas.com">contato@ferasesportivas.com</a></li>
+          <li>Instagram: <a href="https://instagram.com/feras.esportivas" target="_blank">@feras.esportivas</a></li>
+          <li>TikTok: <a href="https://tiktok.com/@ferasesportivas" target="_blank">@ferasesportivas</a></li>
+        </ul>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:1rem; font-size:0.8rem;">© 2025 Feras Esportivas. Todos os direitos reservados.</div>
+  </footer>
+</body>
+</html>
