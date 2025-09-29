@@ -96,10 +96,16 @@
         container.innerHTML = '<p>Nenhum produto disponível no momento.</p>';
         return;
       }
-      products.forEach(function(p) {
+      products.forEach(function(p, index) {
         const card = document.createElement('div');
         card.className = 'card';
-        card.innerHTML = `<img src="assets/images/hero.jpg" alt="${p.name}"><div class="card-content"><h3>${p.name}</h3><p>${p.desc} – R$ ${p.price.toFixed(2)}</p><a href="#" class="btn">Comprar</a></div>`;
+        // usa primeira foto se existir, senão imagem padrão
+        let imgSrc = 'assets/images/hero.jpg';
+        if (p.photos && p.photos.length > 0) {
+          imgSrc = p.photos[0];
+        }
+        const priceText = (p.price !== undefined && p.price !== null && !isNaN(p.price)) ? `R$ ${Number(p.price).toFixed(2)}` : '';
+        card.innerHTML = `<img src="${imgSrc}" alt="${p.name}"><div class="card-content"><h3>${p.name}</h3><p>${p.desc} – ${priceText}</p><a href="product.html?index=${index}" class="btn">Detalhes</a></div>`;
         container.appendChild(card);
       });
     })();

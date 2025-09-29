@@ -89,8 +89,8 @@
     <div style="text-align:center; margin-top:1rem; font-size:0.8rem;">© 2025 Feras Esportivas. Todos os direitos reservados.</div>
   </footer>
 
-  <!-- Script para carregar eventos dinâmicos -->
-  <script>
+    <!-- Script para carregar eventos dinâmicos -->
+    <script>
     (function() {
       const events = JSON.parse(localStorage.getItem('events')) || [];
       const container = document.getElementById('events-container');
@@ -98,10 +98,19 @@
         container.innerHTML = '<p>Nenhum evento encontrado. Aguarde atualizações.</p>';
         return;
       }
-      events.forEach(function(ev) {
+      events.forEach(function(ev, index) {
         const card = document.createElement('div');
         card.className = 'card';
-        card.innerHTML = `<img src="assets/images/hero.jpg" alt="${ev.title}"><div class="card-content"><h3>${ev.title}</h3><p>${ev.location} – ${ev.date} – Modalidade: ${ev.modalidade} – Nível: ${ev.nivel}</p><a href="#" class="btn">Inscrever-se</a></div>`;
+        // Usa a primeira foto do evento se existir, caso contrário usa imagem padrão
+        let imgSrc = 'assets/images/hero.jpg';
+        if (ev.photos && ev.photos.length > 0) {
+          imgSrc = ev.photos[0];
+        }
+        // Prepara resumo da descrição (máx 100 caracteres)
+        const desc = ev.desc || '';
+        const shortDesc = desc.length > 100 ? desc.substring(0, 97) + '...' : desc;
+        const priceText = (ev.price !== undefined && ev.price !== null && !isNaN(ev.price)) ? ` – R$ ${Number(ev.price).toFixed(2)}` : '';
+        card.innerHTML = `<img src="${imgSrc}" alt="${ev.title}"><div class="card-content"><h3>${ev.title}</h3><p>${ev.location} – ${ev.date} – ${ev.modalidade} – ${ev.nivel}${priceText}</p><p>${shortDesc}</p><a href="event.html?index=${index}" class="btn">Detalhes</a></div>`;
         container.appendChild(card);
       });
     })();

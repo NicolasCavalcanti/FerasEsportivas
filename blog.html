@@ -78,8 +78,12 @@
       posts.forEach(function(p, index) {
         const card = document.createElement('div');
         card.className = 'card';
-        // Para o conteúdo completo, podemos redirecionar para post.html com índice
-        card.innerHTML = `<img src="assets/images/hero.jpg" alt="${p.title}"><div class="card-content"><h3>${p.title}</h3><p>${p.snippet}</p><a href="post.html?index=${index}" class="btn">Ler artigo</a></div>`;
+        // utiliza primeira foto se existir
+        let imgSrc = 'assets/images/hero.jpg';
+        if (p.photos && p.photos.length > 0) {
+          imgSrc = p.photos[0];
+        }
+        card.innerHTML = `<img src="${imgSrc}" alt="${p.title}"><div class="card-content"><h3>${p.title}</h3><p>${p.snippet}</p><a href="post.html?index=${index}" class="btn">Ler artigo</a></div>`;
         container.appendChild(card);
       });
     })();

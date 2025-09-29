@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Artigo | Feras Esportivas</title>
+  <title>Evento | Feras Esportivas</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+  <!-- Header -->
   <header>
     <div class="container nav-bar">
       <div class="logo">Feras Esportivas</div>
       <nav class="nav-links">
         <a href="index.html">Home</a>
-        <a href="events.html">Eventos</a>
+        <a href="events.html" class="cta-button">Eventos</a>
         <a href="store.html">Loja</a>
         <a href="blog.html">Blog</a>
         <a href="about.html">Sobre</a>
@@ -24,19 +25,25 @@
     </div>
   </header>
 
+  <!-- Hero Section -->
   <section class="hero" style="background-image:url('assets/images/hero.jpg'); height:30vh;">
     <div class="hero-content">
-      <h1 id="post-title">Título do Artigo</h1>
-      <p id="post-meta">Categoria • Data • Autor</p>
+      <h1 id="event-title">Evento</h1>
+      <p id="event-meta"></p>
     </div>
   </section>
 
+  <!-- Main Content -->
   <main class="container" style="max-width: 800px;">
-    <article id="post-article" style="background-color: var(--color-light); padding: 2rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-      <!-- Conteúdo dinâmico do post será inserido via script -->
+    <article id="event-article" style="background-color: var(--color-light); padding: 2rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+      <!-- Conteúdo do evento será carregado aqui -->
     </article>
+    <div style="margin-top:1rem; text-align:center;">
+      <a href="events.html" class="btn">&laquo; Voltar aos Eventos</a>
+    </div>
   </main>
 
+  <!-- Footer -->
   <footer>
     <div class="container footer-content">
       <div>
@@ -66,52 +73,52 @@
     <div style="text-align:center; margin-top:1rem; font-size:0.8rem;">© 2025 Feras Esportivas. Todos os direitos reservados.</div>
   </footer>
 
-  <!-- Script para carregar conteúdo dinâmico de posts -->
+  <!-- Script dinâmico para carregar o evento -->
   <script>
     (function() {
       const params = new URLSearchParams(window.location.search);
       const idxStr = params.get('index');
       const idx = parseInt(idxStr);
-      const posts = JSON.parse(localStorage.getItem('posts')) || [];
-      if (!isNaN(idx) && posts[idx]) {
-        const p = posts[idx];
-        document.getElementById('post-title').textContent = p.title;
-        // Não armazenamos categoria, data ou autor; deixe meta vazio ou personalize se desejar
-        document.getElementById('post-meta').textContent = '';
-        const article = document.getElementById('post-article');
+      const events = JSON.parse(localStorage.getItem('events')) || [];
+      if (!isNaN(idx) && events[idx]) {
+        const ev = events[idx];
+        // Define título e meta
+        document.getElementById('event-title').textContent = ev.title;
+        const priceText = (ev.price !== undefined && ev.price !== null && !isNaN(ev.price)) ? ` • R$ ${Number(ev.price).toFixed(2)}` : '';
+        document.getElementById('event-meta').textContent = `${ev.date} • ${ev.location} • ${ev.modalidade} • ${ev.nivel}${priceText}`;
+        const article = document.getElementById('event-article');
         article.innerHTML = '';
-        // Converte quebras de linha em parágrafos
-        // Adiciona fotos antes do conteúdo
-        if (p.photos && p.photos.length > 0) {
-          const photosHeading = document.createElement('h3');
-          photosHeading.textContent = 'Fotos';
-          photosHeading.style.marginTop = '0';
-          article.appendChild(photosHeading);
-          p.photos.forEach(function(photo) {
-            const img = document.createElement('img');
-            img.src = photo;
-            img.alt = p.title;
-            img.style.maxWidth = '100%';
-            img.style.marginBottom = '1rem';
-            article.appendChild(img);
-          });
-        }
-        // Conteúdo textual
-        if (p.content) {
-          const paragraphs = p.content.split(/\n+/);
+        // Descrição
+        if (ev.desc) {
+          const paragraphs = ev.desc.split(/\n+/);
           paragraphs.forEach(function(par) {
             const pe = document.createElement('p');
             pe.textContent = par;
             article.appendChild(pe);
           });
         }
-        // Adiciona vídeos após o conteúdo
-        if (p.videos && p.videos.length > 0) {
+        // Fotos
+        if (ev.photos && ev.photos.length > 0) {
+          const photosHeading = document.createElement('h3');
+          photosHeading.textContent = 'Fotos';
+          photosHeading.style.marginTop = '1rem';
+          article.appendChild(photosHeading);
+          ev.photos.forEach(function(photo) {
+            const img = document.createElement('img');
+            img.src = photo;
+            img.alt = ev.title;
+            img.style.maxWidth = '100%';
+            img.style.marginBottom = '1rem';
+            article.appendChild(img);
+          });
+        }
+        // Vídeos
+        if (ev.videos && ev.videos.length > 0) {
           const videosHeading = document.createElement('h3');
           videosHeading.textContent = 'Vídeos';
           videosHeading.style.marginTop = '1rem';
           article.appendChild(videosHeading);
-          p.videos.forEach(function(video) {
+          ev.videos.forEach(function(video) {
             const vid = document.createElement('video');
             vid.src = video;
             vid.controls = true;
@@ -121,8 +128,10 @@
           });
         }
       } else {
-        const article = document.getElementById('post-article');
-        article.innerHTML = '<h2>Artigo não encontrado</h2><p>Não foi possível localizar o artigo solicitado.</p>';
+        document.getElementById('event-title').textContent = 'Evento não encontrado';
+        document.getElementById('event-meta').textContent = '';
+        const article = document.getElementById('event-article');
+        article.innerHTML = '<h2>Evento não encontrado</h2><p>Não foi possível localizar o evento solicitado.</p>';
       }
     })();
   </script>

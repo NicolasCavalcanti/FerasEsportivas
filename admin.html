@@ -57,6 +57,13 @@
           <input type="text" id="event-location" placeholder="Localização" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
           <input type="text" id="event-modal" placeholder="Modalidade" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
           <input type="text" id="event-level" placeholder="Nível" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+          <!-- Novos campos para eventos: preço, descrição, fotos e vídeos -->
+          <input type="number" id="event-price" placeholder="Preço" step="0.01" style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+          <textarea id="event-desc" placeholder="Descrição" style="flex:1 1 100%; padding:0.5rem; border:1px solid #ccc; border-radius:4px;"></textarea>
+          <div style="flex-basis:100%; display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center;">
+            <label>Fotos: <input type="file" id="event-photos" accept="image/*" multiple></label>
+            <label>Vídeos: <input type="file" id="event-videos" accept="video/*" multiple></label>
+          </div>
           <button type="submit" class="cta-button" style="padding:0.5rem 1rem;">Adicionar Evento</button>
         </form>
         <ul id="events-list" style="list-style:none; padding:0;">
@@ -70,6 +77,11 @@
           <input type="text" id="product-name" placeholder="Nome" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
           <input type="text" id="product-desc" placeholder="Descrição" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
           <input type="number" id="product-price" placeholder="Preço" required step="0.01" style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+          <!-- Campos adicionais para produtos: fotos e vídeos -->
+          <div style="flex-basis:100%; display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center;">
+            <label>Fotos: <input type="file" id="product-photos" accept="image/*" multiple></label>
+            <label>Vídeos: <input type="file" id="product-videos" accept="video/*" multiple></label>
+          </div>
           <button type="submit" class="cta-button" style="padding:0.5rem 1rem;">Adicionar Produto</button>
         </form>
         <ul id="products-list" style="list-style:none; padding:0;">
@@ -83,6 +95,11 @@
           <input type="text" id="post-title" placeholder="Título" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
           <input type="text" id="post-snippet" placeholder="Resumo" required style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
           <textarea id="post-content" placeholder="Conteúdo" required style="flex:1 1 100%; padding:0.5rem; border:1px solid #ccc; border-radius:4px;"></textarea>
+          <!-- Campos adicionais para posts: fotos e vídeos -->
+          <div style="flex-basis:100%; display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center; margin-top:0.5rem;">
+            <label>Fotos: <input type="file" id="post-photos" accept="image/*" multiple></label>
+            <label>Vídeos: <input type="file" id="post-videos" accept="video/*" multiple></label>
+          </div>
           <button type="submit" class="cta-button" style="padding:0.5rem 1rem;">Adicionar Post</button>
         </form>
         <ul id="posts-list" style="list-style:none; padding:0;">
@@ -127,6 +144,20 @@
       function saveProducts() { localStorage.setItem('products', JSON.stringify(products)); }
       function savePosts() { localStorage.setItem('posts', JSON.stringify(posts)); }
 
+      // Helper to read multiple files as base64 strings
+      async function readFiles(fileList) {
+        const promises = [];
+        for (const file of fileList) {
+          promises.push(new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(file);
+          }));
+        }
+        return Promise.all(promises);
+      }
+
       // Eventos
       function renderEvents() {
         const list = document.getElementById('events-list');
@@ -140,26 +171,38 @@
         events.forEach((ev, index) => {
           const li = document.createElement('li');
           li.style.marginBottom = '0.5rem';
-          li.innerHTML = `<strong>${ev.title}</strong> - ${ev.date} - ${ev.location} - ${ev.modalidade} - ${ev.nivel} ` +
+          // Mostra preço se definido
+          const priceText = (ev.price !== undefined && ev.price !== null && !isNaN(ev.price)) ? ` - R$ ${Number(ev.price).toFixed(2)}` : '';
+          li.innerHTML = `<strong>${ev.title}</strong> - ${ev.date} - ${ev.location} - ${ev.modalidade} - ${ev.nivel}${priceText} ` +
             `<button data-index="${index}" class="edit-event" style="margin-left:0.5rem;">Editar</button> ` +
             `<button data-index="${index}" class="delete-event" style="margin-left:0.5rem;">Excluir</button>`;
           list.appendChild(li);
         });
       }
-      document.getElementById('event-form').addEventListener('submit', function(e) {
+
+      document.getElementById('event-form').addEventListener('submit', async function(e) {
         e.preventDefault();
+        const photos = await readFiles(document.getElementById('event-photos').files);
+        const videos = await readFiles(document.getElementById('event-videos').files);
+        const priceValue = document.getElementById('event-price').value;
+        const price = priceValue ? parseFloat(priceValue) : null;
         const newEvent = {
           title: document.getElementById('event-title').value,
           date: document.getElementById('event-date').value,
           location: document.getElementById('event-location').value,
           modalidade: document.getElementById('event-modal').value,
-          nivel: document.getElementById('event-level').value
+          nivel: document.getElementById('event-level').value,
+          price: price,
+          desc: document.getElementById('event-desc').value || '',
+          photos: photos,
+          videos: videos
         };
         events.push(newEvent);
         saveEvents();
         renderEvents();
         e.target.reset();
       });
+
       document.getElementById('events-list').addEventListener('click', function(e) {
         if (e.target.classList.contains('delete-event')) {
           const idx = parseInt(e.target.dataset.index);
@@ -179,7 +222,13 @@
           if (m === null) return;
           const n = prompt('Nível', ev.nivel);
           if (n === null) return;
-          events[idx] = { title: t, date: d, location: l, modalidade: m, nivel: n };
+          const prStr = prompt('Preço', ev.price !== undefined && ev.price !== null ? ev.price : '');
+          if (prStr === null) return;
+          const pr = prStr ? parseFloat(prStr) : null;
+          const desc = prompt('Descrição', ev.desc || '');
+          if (desc === null) return;
+          // Mantém fotos e vídeos antigos
+          events[idx] = { title: t, date: d, location: l, modalidade: m, nivel: n, price: pr, desc: desc, photos: ev.photos || [], videos: ev.videos || [] };
           saveEvents();
           renderEvents();
         }
@@ -199,18 +248,25 @@
         products.forEach((p, index) => {
           const li = document.createElement('li');
           li.style.marginBottom = '0.5rem';
-          li.innerHTML = `<strong>${p.name}</strong> - R$ ${p.price.toFixed(2)} - ${p.desc} ` +
+          const priceText = (p.price !== undefined && p.price !== null && !isNaN(p.price)) ? `R$ ${Number(p.price).toFixed(2)}` : '';
+          li.innerHTML = `<strong>${p.name}</strong> - ${priceText} - ${p.desc} ` +
             `<button data-index="${index}" class="edit-product" style="margin-left:0.5rem;">Editar</button> ` +
             `<button data-index="${index}" class="delete-product" style="margin-left:0.5rem;">Excluir</button>`;
           list.appendChild(li);
         });
       }
-      document.getElementById('product-form').addEventListener('submit', function(e) {
+      document.getElementById('product-form').addEventListener('submit', async function(e) {
         e.preventDefault();
+        const photos = await readFiles(document.getElementById('product-photos').files);
+        const videos = await readFiles(document.getElementById('product-videos').files);
+        const priceValue = document.getElementById('product-price').value;
+        const price = priceValue ? parseFloat(priceValue) : null;
         const newProduct = {
           name: document.getElementById('product-name').value,
           desc: document.getElementById('product-desc').value,
-          price: parseFloat(document.getElementById('product-price').value)
+          price: price,
+          photos: photos,
+          videos: videos
         };
         products.push(newProduct);
         saveProducts();
@@ -230,10 +286,11 @@
           if (n === null) return;
           const d = prompt('Descrição', p.desc);
           if (d === null) return;
-          const priceStr = prompt('Preço', p.price);
+          const priceStr = prompt('Preço', p.price !== undefined && p.price !== null ? p.price : '');
           if (priceStr === null) return;
-          const pr = parseFloat(priceStr);
-          products[idx] = { name: n, desc: d, price: pr };
+          const pr = priceStr ? parseFloat(priceStr) : null;
+          // Mantém fotos e vídeos existentes
+          products[idx] = { name: n, desc: d, price: pr, photos: p.photos || [], videos: p.videos || [] };
           saveProducts();
           renderProducts();
         }
@@ -259,12 +316,16 @@
           list.appendChild(li);
         });
       }
-      document.getElementById('post-form').addEventListener('submit', function(e) {
+      document.getElementById('post-form').addEventListener('submit', async function(e) {
         e.preventDefault();
+        const photos = await readFiles(document.getElementById('post-photos').files);
+        const videos = await readFiles(document.getElementById('post-videos').files);
         const newPost = {
           title: document.getElementById('post-title').value,
           snippet: document.getElementById('post-snippet').value,
-          content: document.getElementById('post-content').value
+          content: document.getElementById('post-content').value,
+          photos: photos,
+          videos: videos
         };
         posts.push(newPost);
         savePosts();
@@ -286,7 +347,8 @@
           if (s === null) return;
           const c = prompt('Conteúdo', p.content);
           if (c === null) return;
-          posts[idx] = { title: t, snippet: s, content: c };
+          // Mantém fotos e vídeos existentes
+          posts[idx] = { title: t, snippet: s, content: c, photos: p.photos || [], videos: p.videos || [] };
           savePosts();
           renderPosts();
         }
